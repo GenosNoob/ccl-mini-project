@@ -8,7 +8,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "../redux/reducers/userSlice";
 
 const Nav = styled.div`
-  background-color: ${({ theme }) => theme.bg};
+  background-color: ${({ theme }) => theme.bg_secondary + "E6"}; /* Semi-transparent white */
+  backdrop-filter: blur(10px);
   height: 80px;
   display: flex;
   align-items: center;
@@ -17,8 +18,8 @@ const Nav = styled.div`
   position: sticky;
   top: 0;
   z-index: 10;
-  color: white;
-  border-bottom: 1px solid ${({ theme }) => theme.text_secondary + 20};
+  color: ${({ theme }) => theme.text_primary};
+  border-bottom: 1px solid ${({ theme }) => theme.text_secondary + "20"};
 `;
 const NavContainer = styled.div`
   width: 100%;
@@ -39,7 +40,7 @@ const NavLogo = styled(LinkR)`
   font-weight: 600;
   font-size: 18px;
   text-decoration: none;
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.text_primary}; /* Keep dark for light theme */
 `;
 const Logo = styled.img`
   height: 42px;
@@ -48,7 +49,7 @@ const Mobileicon = styled.div`
   color: ${({ theme }) => theme.text_primary};
   display: none;
   @media screen and (max-width: 768px) {
-    display: flex;
+    display: flex; /* Keep dark for light theme */
     align-items: center;
   }
 `;
@@ -68,8 +69,8 @@ const NavItems = styled.ul`
 `;
 const Navlink = styled(NavLink)`
   display: flex;
-  align-items: center;
-  color: ${({ theme }) => theme.text_primary};
+  align-items: center; /* Keep dark for light theme */
+  color: ${({ theme }) => theme.text_secondary}; /* Use secondary for links */
   font-weight: 500;
   cursor: pointer;
   transition: all 1s slide-in;
@@ -91,7 +92,7 @@ const UserContainer = styled.div`
   gap: 16px;
   align-items: center;
   padding: 0 6px;
-  color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.primary}; /* Primary accent color */
 `;
 const TextButton = styled.div`
   text-align: end;
@@ -111,10 +112,10 @@ const MobileMenu = styled.ul`
   align-items: start;
   gap: 16px;
   padding: 0 6px;
-  list-style: none;
+  list-style: none; /* Keep dark for light theme */
   width: 90%;
   padding: 12px 40px 24px 40px;
-  background: ${({ theme }) => theme.bg};
+  background: ${({ theme }) => theme.bg_secondary}; /* White background for mobile menu */
   position: absolute;
   top: 80px;
   right: 0;
@@ -138,7 +139,7 @@ const Navbar = ({ currentUser }) => {
         </Mobileicon>
         <NavLogo to="/">
           <Logo src={LogoImg} />
-          Fittrack
+          Bodylytics
         </NavLogo>
 
         <MobileMenu isOpen={isOpen}>
@@ -146,6 +147,8 @@ const Navbar = ({ currentUser }) => {
           <Navlink to="/workouts">Workouts</Navlink>
           <Navlink to="/tutorials">Tutorials</Navlink>
           <Navlink to="/blogs">Blogs</Navlink>
+          <Navlink to="/profile">Profile</Navlink>
+          <Navlink to="/meals">Meal Tracker</Navlink>
           <Navlink to="/contact">Contact</Navlink>
         </MobileMenu>
 
@@ -155,6 +158,8 @@ const Navbar = ({ currentUser }) => {
           <Navlink to="/tutorials">Tutorials</Navlink>
           <Navlink to="/blogs">Blogs</Navlink>
           <Navlink to="/contact">Contact</Navlink>
+          <Navlink to="/profile">Profile</Navlink>
+          <Navlink to="/meals">Meal Tracker</Navlink>
         </NavItems>
 
         <UserContainer>

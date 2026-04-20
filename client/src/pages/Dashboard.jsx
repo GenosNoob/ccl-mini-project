@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 import { counts } from "../utils/data";
 import CountsCard from "../components/cards/CountsCard";
 import WeeklyStatCard from "../components/cards/WeeklyStatCard";
 import CategoryChart from "../components/cards/CategoryChart";
-import AddWorkout from "../components/AddWorkout";
-import WorkoutCard from "../components/cards/WorkoutCard";
-import { addWorkout, getDashboardDetails, getWorkouts } from "../api";
+import { getDashboardDetails } from "../api";
+import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
   flex: 1;
@@ -29,8 +29,7 @@ const Wrapper = styled.div`
 const Title = styled.div`
   padding: 0px 16px;
   font-size: 22px;
-  color: ${({ theme }) => theme.text_primary};
-  font-weight: 500;
+  color: ${({ theme }) => theme.text_primary}; 
 `;
 const FlexWrap = styled.div`
   display: flex;
@@ -42,104 +41,106 @@ const FlexWrap = styled.div`
     gap: 12px;
   }
 `;
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
+
+const Welcome = styled.div`
   padding: 0px 16px;
-  gap: 22px;
-  padding: 0px 16px;
-  @media (max-width: 600px) {
-    gap: 12px;
-  }
-`;
-const CardWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 100px;
-  @media (max-width: 600px) {
-    gap: 12px;
-  }
+  font-size: 16px;
+  color: ${({ theme }) => theme.text_secondary};
+  font-weight: 400;
 `;
 
 const Dashboard = () => {
+  const { currentUser, loginTime } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
-  const [buttonLoading, setButtonLoading] = useState(false);
-  const [todaysWorkouts, setTodaysWorkouts] = useState([]);
-  const [workout, setWorkout] = useState(`#Legs
--Back Squat
--5 setsX15 reps
--30 kg
--10 min`);
 
   const dashboardData = async () => {
     setLoading(true);
-    const token = localStorage.getItem("fittrack-app-token");
+    const token = localStorage.getItem("bodylytics-app-token");
     await getDashboardDetails(token).then((res) => {
       setData(res.data);
       console.log(res.data);
-      setLoading(false);
-    });
-  };
-  const getTodaysWorkout = async () => {
-    setLoading(true);
-    const token = localStorage.getItem("fittrack-app-token");
-    await getWorkouts(token, "").then((res) => {
-      setTodaysWorkouts(res?.data?.todaysWorkouts);
-      console.log(res.data);
+    }).catch((err) => {
+      alert(err.response?.data?.message || "Failed to fetch dashboard data.");
+      console.error(err);
+    }).finally(() => {
       setLoading(false);
     });
   };
 
-  const addNewWorkout = async () => {
-    setButtonLoading(true);
-    const token = localStorage.getItem("fittrack-app-token");
-    await addWorkout(token, { workoutString: workout })
-      .then((res) => {
-        dashboardData();
-        getTodaysWorkout();
-        setButtonLoading(false);
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  };
 
   useEffect(() => {
     dashboardData();
-    getTodaysWorkout();
   }, []);
+
+  // Re-calculate derived values here, after data is fetched.
+  const dailyCaloriesTarget = data?.user?.dailyCaloriesTarget || 2000;
+  const goalWeight = data?.user?.goalWeight || "N/A";
+  const calorieDeficit = data?.user?.calorieDeficit || 0;
+  const remainingCaloriesTarget = dailyCaloriesTarget - calorieDeficit;
+  const totalCaloriesConsumed = data?.totalCaloriesConsumed || 0;
+  const caloriesRemaining = dailyCaloriesTarget - totalCaloriesConsumed;
+
   return (
     <Container>
       <Wrapper>
-        <Title>Dashboard</Title>
-        <FlexWrap>
-          {counts.map((item) => (
-            <CountsCard item={item} data={data} />
-          ))}
-        </FlexWrap>
+        <Title>
+          Welcome, {currentUser?.name}
+        </Title>
+        {loginTime && <Welcome>Login Time: {loginTime}</Welcome>}
 
-        <FlexWrap>
-          <WeeklyStatCard data={data} />
-          <CategoryChart data={data} />
-          <AddWorkout
-            workout={workout}
-            setWorkout={setWorkout}
-            addNewWorkout={addNewWorkout}
-            buttonLoading={buttonLoading}
-          />
-        </FlexWrap>
+        {loading || !data ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <FlexWrap>
+              <CountsCard
+                item={{ ...counts[0], name: "Calories Burned", key: "totalCaloriesBurnt" }}
+                data={data}
+              />
+              <CountsCard
+                item={{ name: "Total Workouts", key: "totalWorkouts" }}
+                data={data}
+              />
+              <CountsCard
+                item={{ name: "Avg Calories/Workout", key: "avgCaloriesBurntPerWorkout", unit: "kcal" }}
+                data={data}
+              />
+            </FlexWrap>
 
-        <Section>
-          <Title>Todays Workouts</Title>
-          <CardWrapper>
-            {todaysWorkouts.map((workout) => (
-              <WorkoutCard workout={workout} />
-            ))}
-          </CardWrapper>
-        </Section>
+            <FlexWrap>
+              <CountsCard
+                item={{ name: "Daily Target", key: "dailyCaloriesTarget", unit: "kcal", desc: "Your daily calorie target" }}
+                data={{ dailyCaloriesTarget }}
+              />
+              <CountsCard
+                item={{ name: "Goal Weight", key: "goalWeight", unit: "kg", desc: "Your target weight" }}
+                data={{ goalWeight }}
+              />
+              <CountsCard
+                item={{ name: "Calorie Deficit", key: "calorieDeficit", unit: "kcal", desc: "Your target calorie deficit" }}
+                data={{ calorieDeficit }}
+              />
+              <CountsCard
+                item={{ name: "Effective Target", key: "effectiveTargetCalories", unit: "kcal", desc: "Daily Target - Deficit" }}
+                data={{ effectiveTargetCalories: remainingCaloriesTarget }}
+              />
+              <CountsCard
+                item={{ name: "Calories Consumed", key: "totalCaloriesConsumed", unit: "kcal", desc: "Total calories consumed today" }}
+                data={data}
+              />
+              <CountsCard
+                item={{ name: "Calories Remaining", key: "caloriesRemaining", unit: "kcal", desc: "Remaining calories for the day" }}
+                data={{ caloriesRemaining }}
+              />
+            </FlexWrap>
+
+            <FlexWrap>
+              <WeeklyStatCard data={data?.totalWeeksStats} />
+              <CategoryChart data={data} />
+            </FlexWrap>
+          </>
+        )}
       </Wrapper>
     </Container>
   );

@@ -8,7 +8,7 @@ import SignUp from "../components/SignUp";
 const Container = styled.div`
   flex: 1;
   height: 100%;
-  display: flex;
+  display: flex; /* Changed to bg_secondary for light theme */
   background: ${({ theme }) => theme.bg};
   @media (max-width: 700px) {
     flex-direction: column;
@@ -19,6 +19,15 @@ const Left = styled.div`
   position: relative;
   @media (max-width: 700px) {
     display: none;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1); /* Lighter overlay for light theme */
   }
 `;
 const Logo = styled.img`
@@ -49,7 +58,7 @@ const Right = styled.div`
 const Text = styled.div`
   font-size: 16px;
   text-align: center;
-  color: ${({ theme }) => theme.text_secondary};
+  color: ${({ theme }) => theme.text_secondary}; /* Darker text for light theme */
   margin-top: 16px;
   @media (max-width: 400px) {
     font-size: 14px;

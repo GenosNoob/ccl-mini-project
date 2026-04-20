@@ -6,9 +6,9 @@ const Card = styled.div`
   flex: 1;
   min-width: 280px;
   padding: 24px;
-  border: 1px solid ${({ theme }) => theme.primary + "40"};
+  border: 1px solid ${({ theme }) => theme.text_secondary + "20"};
   border-radius: 14px;
-  box-shadow: 0px 4px 32px ${({ theme }) => theme.primary + "15"};
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -19,7 +19,7 @@ const Card = styled.div`
 const Title = styled.div`
   font-weight: 600;
   font-size: 16px;
-  color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.text_primary};
   @media (max-width: 600px) {
     font-size: 14px;
   }
@@ -53,7 +53,7 @@ const CategoryChart = ({ data }) => {
           height={300}
           sx={{
             "& .MuiChartsLegend-label": {
-              fill: theme.text_primary, // Increased contrast for legend labels
+              fill: theme.text_primary,
             },
             "& .MuiChartsPie-sliceLabel": {
               fill: theme.text_primary,

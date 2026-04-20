@@ -14,7 +14,7 @@ const Button = styled.div`
   gap: 6px;
   height: min-content;
   padding: 16px 26px;
-  box-shadow: 0px 4px 12px 0px ${({ theme }) => theme.primary + 40};
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Lighter shadow for light theme */
   border: 1px solid ${({ theme }) => theme.primary};
   @media (max-width: 600px) {
     padding: 8px 12px;
@@ -30,8 +30,8 @@ border: 1px solid ${({ theme }) => theme.purple};
   background: ${theme.primary};
 `}
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 6px 20px 0px ${({ theme }) => theme.primary + 50};
+    transform: translateY(-1px); /* Subtle hover effect */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Slightly more pronounced hover shadow */
   }
 
   ${({ $isDisabled }) =>

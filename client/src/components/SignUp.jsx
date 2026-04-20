@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled from "styled-components"; 
 import TextInput from "./TextInput";
 import Button from "./Button";
 import { UserSignUp } from "../api";
@@ -46,16 +46,23 @@ const SignUp = () => {
     if (validateInputs()) {
       await UserSignUp({ name, email, password })
         .then((res) => {
-          dispatch(loginSuccess(res.data));
+          dispatch(loginSuccess({
+            ...res.data,
+            loginTime: new Date().toLocaleString(),
+          }));
+          localStorage.setItem("bodylytics-app-token", res.data.token);
           alert("Account Created Success");
           setLoading(false);
           setButtonDisabled(false);
         })
         .catch((err) => {
-          alert(err.response.data.message);
+          alert(err.response?.data?.message || err.message || "Network Error: Unable to reach the server.");
           setLoading(false);
           setButtonDisabled(false);
         });
+    } else {
+      setLoading(false);
+      setButtonDisabled(false);
     }
   };
   return (

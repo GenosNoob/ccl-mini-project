@@ -4,10 +4,10 @@ import styled from "styled-components";
 const Card = styled.div`
   flex: 1;
   min-width: 200px;
-  padding: 22px;
-  border: 1px solid ${({ theme }) => theme.primary + '40'};
+  padding: 22px; /* Adjusted border and shadow for light theme */
+  border: 1px solid ${({ theme }) => theme.text_secondary + '20'};
   border-radius: 14px;
-  display: flex;  box-shadow: 0px 4px 32px ${({ theme }) => theme.primary + '15'};
+  display: flex;  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
   gap: 6px;
 `;
 const Left = styled.div`
@@ -22,7 +22,7 @@ const Left = styled.div`
 const Title = styled.div`
   font-weight: 600;
   font-size: 16px;
-  color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.text_secondary}; /* Darker title for light theme */
   @media (max-width: 600px) {
     font-size: 14px;
   }
@@ -32,7 +32,7 @@ const Value = styled.div`
   font-size: 32px;
   display: flex;
   align-items: end;
-  gap: 8px;
+  gap: 8px; /* Darker value for light theme */
   color: ${({ theme }) => theme.text_primary};
   @media (max-width: 600px) {
     font-size: 22px;
@@ -65,14 +65,14 @@ const Icon = styled.div`
   justify-content: center;
   border-radius: 12px;
   ${({ color, bg, theme }) => `
-  background: ${bg || theme.primary + "20"};
+  background: ${bg || theme.primary + "20"}; /* Keep accent colors */
   color: ${color};
   `}
 `;
 
 const Desc = styled.div`
   font-size: 14px;
-  color: ${({ theme }) => theme.text_secondary + 90};
+  color: ${({ theme }) => theme.text_secondary}; /* Darker description for light theme */
   margin-bottom: 6px;
   @media (max-width: 600px) {
     font-size: 12px;

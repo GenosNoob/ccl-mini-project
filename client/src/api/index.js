@@ -1,11 +1,16 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://fitnesstrack-vtv1.onrender.com/api/",
+  baseURL: "/api/",
 });
 
 export const UserSignUp = async (data) => API.post("/user/signup", data);
 export const UserSignIn = async (data) => API.post("/user/signin", data);
+
+export const updateUserProfile = async (token, data) =>
+  API.put(`/user/`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
 export const getDashboardDetails = async (token) =>
   API.get("/user/dashboard", {
@@ -19,5 +24,20 @@ export const getWorkouts = async (token, date) =>
 
 export const addWorkout = async (token, data) =>
   await API.post(`/user/workout`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const deleteWorkout = async (token, id) =>
+  await API.delete(`/user/workout/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const addMeal = async (token, data) =>
+  await API.post(`/user/meal`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const getMeals = async (token, date) =>
+  await API.get(`/user/meal${date}`, {
     headers: { Authorization: `Bearer ${token}` },
   });

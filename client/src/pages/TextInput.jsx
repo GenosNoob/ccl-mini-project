@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const Label = styled.label`
   font-size: 12px;
-  color: ${({ theme }) => theme.text_primary};
+  color: ${({ theme }) => theme.text_secondary}; /* Darker label for light theme */
   padding: 0px 4px;
   ${({ error, theme }) =>
     error &&
@@ -32,8 +32,8 @@ const Label = styled.label`
 
 const OutlinedInput = styled.div`
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.text_secondary + 90};
-  background-color: transparent;
+  border: 1px solid ${({ theme }) => theme.text_secondary + "40"}; /* Lighter border for light theme */
+  background-color: ${({ theme }) => theme.bg_secondary}; /* White background for input */
   color: ${({ theme }) => theme.text_primary};
   outline: none;
   padding: 16px;
@@ -79,7 +79,7 @@ const Input = styled.input`
   font-size: 14px;
   outline: none;
   border: none;
-  background-color: transparent;
+  background-color: transparent; /* Keep transparent for light theme */
   color: ${({ theme }) => theme.text_primary};
   &:focus {
     outline: none;
@@ -117,7 +117,7 @@ const ChipWrapper = styled.div`
 const Chip = styled.div`
   padding: 5px 10px;
   border-radius: 8px;
-  background: ${({ theme }) => theme.primary + 10};
+  background: ${({ theme }) => theme.primary + "20"}; /* Keep accent color for chips */
   color: ${({ theme }) => theme.primary};
   font-size: 12px;
   display: flex;

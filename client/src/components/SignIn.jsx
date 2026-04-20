@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled from "styled-components"; 
 import TextInput from "./TextInput";
 import Button from "./Button";
 import { UserSignIn } from "../api";
@@ -45,23 +45,30 @@ const SignIn = () => {
     if (validateInputs()) {
       await UserSignIn({ email, password })
         .then((res) => {
-          dispatch(loginSuccess(res.data));
+          dispatch(loginSuccess({
+            ...res.data,
+            loginTime: new Date().toLocaleString(),
+          }));
+          localStorage.setItem("bodylytics-app-token", res.data.token);
           alert("Login Success");
           setLoading(false);
           setButtonDisabled(false);
         })
         .catch((err) => {
-          alert(err.response.data.message);
+          alert(err.response?.data?.message || err.message || "Network Error: Unable to reach the server.");
           setLoading(false);
           setButtonDisabled(false);
         });
+    } else {
+      setLoading(false);
+      setButtonDisabled(false);
     }
   };
 
   return (
     <Container>
       <div>
-        <Title>Welcome to Fittrack 👋</Title>
+        <Title>Welcome to Bodylytics 👋</Title>
         <Span>Please login with your details here</Span>
       </div>
       <div
