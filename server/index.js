@@ -1,4 +1,5 @@
 import express from "express";
+import serverless from "serverless-http";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -40,13 +41,13 @@ const connectDB = () => {
     });
 };
 
-const startServer = async () => {
-  try {
-    connectDB();
-    app.listen(8080, () => console.log("Server started on port 8080"));
-  } catch (error) {
-    console.log(error);
-  }
-};
+// Connect to the database
+connectDB();
 
-startServer();
+// Export the serverless handler
+export const handler = serverless(app, { basePath: '/.netlify/functions/index' });
+
+// Keep local development working
+if (process.env.NODE_ENV !== "production") {
+  app.listen(8080, () => console.log("Server started on port 8080"));
+}

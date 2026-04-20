@@ -1,0 +1,16 @@
+[build]
+  command = "cd client && npm install && npm run build"
+  publish = "client/build"
+  functions = "server"
+
+[[redirects]]
+  # Redirect API requests to the Netlify Serverless Function
+  from = "/api/*"
+  to = "/.netlify/functions/index/api/:splat"
+  status = 200
+
+[[redirects]]
+  # Redirect all other routes to React Router index.html
+  from = "/*"
+  to = "/index.html"
+  status = 200
