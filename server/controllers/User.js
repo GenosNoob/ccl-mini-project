@@ -2,9 +2,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { createError } from "../error.js";
-import User from "../models/User.js";
-import Workout from "../models/Workout.js";
-import Meal from "../models/Meal.js";
+import UserModule from "../models/User.js";
+import WorkoutModule from "../models/Workout.js";
+import MealModule from "../models/Meal.js";
+
+const User = UserModule.default || UserModule;
+const Workout = WorkoutModule.default || WorkoutModule;
+const Meal = MealModule.default || MealModule;
 
 dotenv.config();
 
@@ -247,16 +251,16 @@ export const addWorkout = async (req, res, next) => {
 
     // Basic validation
     if (!workoutName || !sets || !reps || !weight || !duration || !category) {
-        return next(createError(400, "All fields are required"));
+      return next(createError(400, "All fields are required"));
     }
 
     const newWorkoutDetails = {
-        workoutName,
-        sets: Number(sets),
-        reps: Number(reps),
-        weight: Number(weight),
-        duration: Number(duration),
-        category,
+      workoutName,
+      sets: Number(sets),
+      reps: Number(reps),
+      weight: Number(weight),
+      duration: Number(duration),
+      category,
     };
 
     const calories = parseFloat(calculateCaloriesBurnt(newWorkoutDetails));
@@ -327,7 +331,7 @@ export const getMealsByDate = async (req, res, next) => {
   try {
     const userId = req.user?.id;
     let date = req.query.date ? new Date(req.query.date) : new Date();
-    
+
     const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 
