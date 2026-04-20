@@ -29,13 +29,7 @@ const lightTheme = {
   cyan: "#17A2B8", // Info cyan
 };
 
-// You can keep the darkTheme defined if you plan to implement a theme switcher later
-const darkTheme = { 
-  bg: "#0b0d12", bg_secondary: "#13161f", primary: "#4f8aff", secondary: "#a78bfa", 
-  text_primary: "#e4e8f4", text_secondary: "#9aa3bf", card: "#191d2a", 
-  white: "#FFFFFF", black: "#000000", green: "#34d399", red: "#f87171", 
-  yellow: "#fbbf24", cyan: "#22d3ee", 
-};
+
 
 const Container = styled.div`
   width: 100%;
