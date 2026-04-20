@@ -3,7 +3,7 @@ import serverless from "serverless-http";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
-import UserRoutes from "./routes/user.js";
+import UserRoutes from "./routes/User.js";
 
 dotenv.config();
 
