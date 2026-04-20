@@ -2,7 +2,7 @@
   CI = "false"
 
 [build]
-  command = "cd client && npm install && npm run build"
+  command = "npm install --prefix server && npm install --prefix client && npm run build --prefix client"
   publish = "client/build"
   functions = "server"
 
